@@ -1,0 +1,268 @@
+<%-include('../layouts/header')%>
+<%- include('../partials/admin-header')%>
+
+<div class="header" style="margin-top: 80px;">
+    <h1>Edit Product </h1>
+</div>
+<%- include('../partials/admin-canvas')%>
+<div class="container-fluid" style="margin-top: 80px;" >
+    <div class="row  border-start">
+        <main class="px-md-4 icons">
+            <div class="row d-flex justify-content-between">
+                <div class="col-md-8">
+                    <h1 class="mt-5">EDIT PRODUCT</h1>
+                    <br>
+                    <form action="/admin/editproduct/<%=product._id%>" method="post" enctype="multipart/form-data" class="bg-white">
+                        <div class="form-group">
+                            <label for="productName">Product Name:</label>
+                            <input
+                                type="text"
+                                value="<%=product.ProductName%>"
+                                name="ProductName"
+                                class="form-control bg-light"
+                                id="productName"
+                                placeholder="Enter product name"
+                                required
+                            />
+                        </div><br>
+
+                        <div class="form-group">
+                            <label for="productDescription">Product Description:</label>
+                            <input
+                                type="text"
+                                value="<%=product.Description%>"
+                                class="form-control bg-light"
+                                name="Description"
+                                id="productDescription"
+                                rows="4"
+                                placeholder="Enter product description"
+                                required
+                            >
+                        </div>
+                        <br >
+                        <div class="form-group">
+                            <label for="productSpecification">Product Specification:</label>
+                            <input
+                                type="text"
+                                value="<%=product.Specification1%>"
+                                class="form-control bg-light"
+                                name="Specification1"
+                                id="productSpecification1"
+                                placeholder="Enter product Specification"
+                                required
+                            ><br>
+                            <label for="productSpecification2">Product Specification:</label>
+                            <input
+                                type="text"
+                                value="<%=product.Specification2%>"
+                                class="form-control bg-light"
+                                name="Specification2"
+                                id="productSpecification"
+                                placeholder="Enter product Specification"
+                                required
+                            ><br>
+                            <label for="productSpecification3">Product Specification:</label>
+                            <input
+                                type="text"
+                                value="<%=product.Specification3%>"
+                                class="form-control bg-light"
+                                name="Specification3"
+                                id="productSpecification"
+                                placeholder="Enter product Specification"
+                                required
+                            ><br>
+                            <label for="productSpecification4">Product Specification:</label>
+                            <input
+                                type="text"
+                                value="<%=product.Specification4%>"
+                                class="form-control bg-light"
+                                name="Specification4"
+                                id="productSpecification"
+                                placeholder="Enter product Specification"
+                                required
+                            >
+                        </div>
+                        <br>
+
+                        <div class="border p-3 mb-3 bg-light "> <!-- Added bg-light and text-center classes -->
+                            <h3>Media</h3>
+                            <div class="form-group text-center">
+                                <label for="image1">Image 1:</label>
+                                <input
+                                  type="file"
+                                  name="image1"
+                                  value="<%= product.images[0] %>"
+                                  class="form-control-file"
+                                  id="image1"
+                                  accept="image/*"
+                                />
+                                <img src="/uploads/<%= product.images[0] %>" alt="Image 1" class="img-fluid" style="max-height: 200px;"id="previewImage1">
+                              </div>
+                              <div class="form-group text-center">
+                                <label for="image2">Image 2:</label>
+                                <input
+                                  type="file"
+                                  name="image2"
+                                  value="<%= product.images[1] %>"
+                                  class="form-control-file"
+                                  id="image2"
+                                  accept="image/*"
+                                />
+                                <img src="/uploads/<%= product.images[1] %>" alt="Image 2" class="img-fluid" style="max-height: 200px;"id="previewImage2">
+                              </div>
+                              <div class="form-group text-center">
+                                <label for="image3">Image 3:</label>
+                                <input
+                                  type="file"
+                                  name="image3"
+                                  value="<%= product.images[2] %>"
+                                  class="form-control-file"
+                                  id="image3"
+                                  accept="image/*"
+                                />
+                                <img src="/uploads/<%= product.images[2] %>" alt="Image 3" class="img-fluid" style="max-height: 200px;"id="previewImage3">
+                              </div>
+                            </div>
+                        </div>
+
+
+                        <div class="border p-3 mb-3">
+                            <h2>Pricing</h2>
+                            <div class="form-group">
+                                <label for="basePrice">Base Price:</label>
+                                <input
+                                    value="<%=product.Price%>"
+                                    type="number"
+                                    name="Price"
+                                    class="form-control bg-light"
+                                    id="basePrice"
+                                    placeholder="Enter base price"
+                                    required
+                                />
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label for="discountAmount">Discount Amount:</label>
+                                <input
+                                    value="<%=product.DiscountAmount%>"
+                                    type="number"
+                                    name="DiscountAmount"
+                                    class="form-control bg-light"
+                                    id="discountAmount"
+                                    placeholder="Enter discount amount"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+
+                        <div class="border p-3 mb-3">
+                            <h2>Variations</h2>
+                            <div>
+                                <input type="radio" name="ProductType" id="watchesRadio" value="watches"<% if(product.ProductType === 'watches'){%>checked<%}%> > Watches
+                                <input type="radio" name="ProductType" id="perfumesRadio" value="perfumes"<% if(product.ProductType === 'perfumes'){%>checked<%}%> > Perfumes
+                            </div>
+                            <div id="watchColorInput" style ="<% if (product.ProductType !== 'watches') { %>display: none;<% } %>">
+                                <label for="watchColors">Enter Watch Colors:</label>
+                                <input type="text" name="watches" id="watchColors" value="<%= product.Variation %>">
+                            </div>
+                            <div id="perfumeQuantityDropdown" style="<% if (product.ProductType !== 'perfumes') { %>display: none;<% } %>">
+                                <label for="perfumeQuantity">Select Perfume Quantity:</label>
+                                <select id="perfumeQuantity" name="perfumes">
+                                    <option value="50 ML"<% if (product.ProductType === 'perfumes' && product.Variation === '50 ML') { %>selected<% } %> >50ML</option>
+                                    <option value="100 ML"<% if (product.ProductType === 'perfumes' && product.Variation === '100 ML') { %>selected<% } %> >100ML</option>
+                                    <option value="150 ML"<% if (product.ProductType === 'perfumes' && product.Variation === '150 ML') { %>selected<% } %> >150ML</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="border p-3 mb-3">
+                            <h2>Stock</h2>
+                            
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <input
+                                    type="number"
+                                    value="<%=product.AvailableQuantity%>"
+                                    name="AvailableQuantity"
+                                    class="form-control bg-light"
+                                    id="quantity"
+                                    placeholder="Enter quantity"
+                                    required
+                                />
+                            </div>
+                        </div>
+                </div>
+
+                <div class="col-md-4 my-5">
+                    <div class="bg-white p-3">
+                        <div class="form-group">
+                            <label for="category">Category:</label>
+                            <select class="form-select bg-light" id="category" name="Category" required>
+                                <option value="<%=product.Category.Name%>"><%=product.Category.Name%></option>
+                                <% categories.forEach(function(category) { %>
+                                    <option value="<%=category.Name%>"><%=category.Name%></option>
+                                    <% }); %>
+                            </select>
+                        </div><br>
+                        <div class="form-group">
+                            <br>
+                            <label for="brandName">Brand Name:</label>
+                            <select name="BrandName" class="form-select bg-light" id="brand" required>
+                                <option value="<%=product.BrandName.Name%>"><%=product.BrandName.Name%></option>
+                                <% brands.forEach(function(brand) { %>
+                                    <option value="<%=brand.Name%>"><%=brand.Name%></option>
+                                    <% }); %>
+                            </select>
+                            
+                        </div><br>
+                        <div class="form-group">
+                            <label for="tags">Tags:</label>
+                            <input
+                                type="text"
+                                value="<%=product.Tags%>"
+                                class="form-control bg-light"
+                                name="Tags"
+                                id="tags"
+                                placeholder="Enter tags"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary ms-3">Edit Product</button>
+                </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+<script>
+    // Function to update the preview image when a file is selected
+    function updatePreviewImage(inputId, imageId) {
+        const fileInput = document.getElementById(inputId);
+        const previewImage = document.getElementById(imageId);
+
+        fileInput.addEventListener('change', function() {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.src = ''; // Clear the image when no file is selected
+            }
+        });
+    }
+
+    // Call the function for each file input
+    updatePreviewImage('image1', 'previewImage1');
+    updatePreviewImage('image2', 'previewImage2');
+    updatePreviewImage('image3', 'previewImage3');
+</script>
+<%- include('../layouts/footer') %>

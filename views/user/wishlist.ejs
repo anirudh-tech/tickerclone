@@ -1,0 +1,51 @@
+<%- include('../layouts/header')%>
+<%- include('../partials/user-header')%>
+
+<% if (user.Wishlist.length === 0) { %>
+    <div class="h2 text-center">
+        No items in wishlist yet! Add some now!
+    </div>
+    <div class="col-md-12 text-center">
+        <video autoplay loop muted style="height: 500px;">
+            <source src="/images/empty.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <% } else { %>
+        <div class="container mt-5">
+            <h5 class="mb-4">My Wishlist</h5>
+            <div class="row">
+            <% user.Wishlist.forEach(function(wish) { %>
+                <div class="col-md-12">
+                    <div class="card tickerTimes mb-3">
+                        <div class="row no-gutters">
+                            <div class="col-md-2">
+                                <img src="/uploads/<%= wish.ProductId?.images[0] %>" alt="Product 1" class="img-fluid">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card-body">
+                                    <h6 class="card-title product-name"><%= wish.ProductId?.ProductName %></h6>
+                                    <strong class="card-text">₹<%= wish.ProductId?.DiscountAmount %></strong>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-center">
+                                <a href="/addToCart/<%= wish.ProductId?._id %>" class="btn btn-info">Add To Cart</a>
+                                <a href="/removeFromWishlist/<%= wish.ProductId?._id %>" class="btn btn-danger ms-2">Remove From Wishlist</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+</div>
+
+<style>
+.product-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
+
+<%- include('../layouts/footer') %>

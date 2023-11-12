@@ -1,0 +1,40 @@
+<%- include('../layouts/header')%>
+<%- include('../partials/admin-header')%>
+<div class="header" style="margin-top: 80px;">
+    <h1>Add Brand</h1>
+  </div>
+  <%- include('../partials/admin-canvas')%>
+<div class="container-fluid">
+    <div class="row  border-start">
+        <main class="px-md-4 icons">
+            <div class="row d-flex justify-content-between">
+                <div class="col-md-8">
+                    <h1 class="mt-5">ADD BRAND</h1>
+                    <% if (messages.error) { %>
+                        <div class="alert alert-danger">
+                            <%= messages.error %>
+                        </div>
+                    <% } %>
+                    <form action="/admin/addbrand" method="post" class="bg-white">
+                        <div class="form-group">
+                            <label for="brandname">Brand Name:</label>
+                            <input
+                                type="text"
+                                name="Name"
+                                class="form-control bg-light"
+                                id="categoryName"
+                                placeholder="Enter Category name"
+                                required
+                            />
+                        </div><br><br>
+                        <button type="submit" class="btn btn-primary ms-3">Add Brand</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+
+
+<%- include('../layouts/footer') %>

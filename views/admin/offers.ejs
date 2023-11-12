@@ -1,0 +1,204 @@
+<%- include('../layouts/header')%> <%- include('../partials/admin-header')%>
+<div class="header" style="margin-top: 80px">
+  <h1>OFFERS</h1>
+</div>
+<%- include('../partials/admin-canvas')%>
+<div
+  class="modal fade tickerTimes"
+  id="addCategoryOfferModal"
+  tabindex="-1"
+  aria-labelledby="addCategoryOfferModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCategoryOfferModalLabel">
+          Add Category Offer
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/addCategoryOffer" method="post">
+          <div class="mb-3">
+            <label for="category">Category:</label>
+            <select
+              class="form-select bg-light"
+              id="category"
+              name="categoryName"
+              required
+            >
+              <option value="" selected disabled>Select a category</option>
+              <% categories.forEach(function(category) { %>
+              <option value="<%=category.Name%>"><%=category.Name%></option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="expiryDate" class="form-label">Expiry Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="expiryDate"
+              name="expiryDate"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="offerPrice" class="form-label">Discount Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="offerPrice"
+              name="offerPrice"
+              placeholder="Enter discount amount"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row mt-5">
+    <main class="col-md-12 ms-sm-auto col-lg-12 px-md-4 bg-light">
+      
+      <div class="table-responsive" style="min-height: 100vh">
+        
+        <div class="d-flex justify-content-between m-3">
+          <h2>Category offers</h2>
+          <a
+            class="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#addCategoryOfferModal"
+            >+ Add category offer</a
+          >
+        </div>
+        <table id="table" class="table overflow-scroll">
+          <thead>
+            <tr class="h5">
+              <th class="border text-center-in-table">Category Name</th>
+              <th class="border text-center-in-table">Expiry date</th>
+              <th class="border text-center-in-table">Discount Amount</th>
+              <th class="border text-center-in-table">EDIT</th>
+              <th class="border text-center-in-table">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categoryOffers.forEach(function(offer) { %>
+            <tr>
+              <td class="border text-center-in-table">
+                <%=offer.categoryName%>
+              </td>
+              <td class="border text-center-in-table"><%=offer.expiryDate%></td>
+              <td class="border text-center-in-table">
+                ₹<%=offer.offerPrice%>
+              </td>
+              <td class="border text-center-in-table">
+                <a href="/admin/edit-offer/">
+                  <i class="fas fa-pencil d-flex justify-content-center"></i>
+                </a>
+              </td>
+              <% if(offer.status === "Active"){%>
+              <td class="border text-center-in-table">
+                <button class="btn btn-outline-success" onclick="showConfirmationDialog('<%=offer._id%>','Deactivate')">
+                  <i class="fas fa-unlock d-flex justify-content-center"></i>
+                </button>
+              </td>
+              <% } else {%>
+              <td class="border text-center-in-table">
+                    <button class="btn btn-outline-danger" onclick="showConfirmationDialog('<%=offer._id%>','Activate')">
+                      <i class="fas fa-lock d-flex justify-content-center"></i>
+                    </button>
+                  </td>
+              <%}%>
+            </tr>
+            <%})%>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function showConfirmationDialog(offerId,status) {
+        console.log(status);
+  Swal.fire({
+    title: 'Confirmation',
+    text: `Are you sure you want to ${status} this offer?`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    cancelButtonText: 'No',
+  }).then((result) => {
+    if (result.isConfirmed) {
+        console.log('inside confirmed',status);
+        if(status === 'Activate'){
+            enableOffer(offerId)
+        }else if(status === 'Deactivate'){
+            disableOffer(offerId);
+        }else{
+            return
+        }
+    }
+  });
+}
+    async function disableOffer(offerId){
+        console.log('called disable',status);
+        let response = await fetch(`/admin/offers/disableAndEnableOffer/${offerId}`,{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: 'Inactive'
+                })
+        });
+        if(response){
+            console.log(response.success);
+            const data = await response.json()
+            if(data){
+                location.reload();
+            }else{
+                alert("Failed to disable the Offer");
+            }
+        }else{
+            alert("Failed to disable the Offer");
+        }
+    }
+    async function enableOffer(offerId){
+        console.log('called enable');
+        let response = await fetch(`/admin/offers/disableAndEnableOffer/${offerId}`,{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: 'Active'
+                })
+        });
+        if(response){
+            const data = response.json()
+            if(data){
+                location.reload();
+            }else{
+                alert("Failed to enable the Offer");
+            }
+        }else{
+            alert("Failed to enable the Offer");
+        }
+    }
+</script>
+<%- include('../layouts/footer') %>

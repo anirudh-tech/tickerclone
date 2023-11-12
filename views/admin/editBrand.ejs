@@ -1,0 +1,41 @@
+<%- include('../layouts/header')%>
+<%- include('../partials/admin-header')%>
+<div class="header" style="margin-top: 80px;">
+    <h1>Edit Brand</h1>
+  </div>
+  <%- include('../partials/admin-canvas')%>
+<div class="container-fluid">
+    <div class="row  border-start">
+        <main class="px-md-4 icons">
+            <div class="row d-flex justify-content-between">
+                <div class="col-md-8 text-center">
+                    <h1 class="mt-5">EDIT BRAND</h1>
+                    <% if (messages.error) { %>
+                        <div class="alert alert-danger">
+                            <%= messages.error %>
+                        </div>
+                    <% } %>
+                    <form action="/admin/editBrand/<%=brand._id%>" method="post" class="bg-white">
+                        <div class="form-group">
+                            <label for="brandname">Brand Name:</label>
+                            <input
+                                type="text"
+                                value="<%=brand.Name%>"
+                                name="Name"
+                                class="form-control bg-light"
+                                id="brandName"
+                                placeholder="Enter Brand name"
+                                required
+                            />
+                        </div><br><br>
+                        <button type="submit" class="btn btn-primary ms-3">Edit Brand</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+
+
+<%- include('../layouts/footer') %>

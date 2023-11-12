@@ -1,0 +1,331 @@
+<%- include('../layouts/header')%> <%- include('../partials/admin-header')%>
+<div
+  class="modal fade modal-lg"
+  id="addCouponModal"
+  tabindex="-1"
+  aria-labelledby="addCouponModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div
+      class="modal-content tickerTimes"
+      style="
+        background: linear-gradient(
+          to right,
+          rgb(255, 255, 255),
+          rgb(196, 255, 245)
+        );
+      "
+    >
+      <div class="modal-header">
+        <h2 class="modal-title" id="addCouponModalLabel">Add Coupon</h2>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="couponForm">
+          <div
+            id="flashMessage"
+            class="alert alert-danger"
+            style="display: none"
+          ></div>
+          <div class="form-group">
+            <label for="couponName">Name of Coupon</label>
+            <input
+              type="text"
+              class="form-control"
+              id="couponName"
+              name="couponName"
+              placeholder="Enter the name of coupon"
+              required
+            />
+          </div>
+          <br />
+          <div class="form-group">
+            <label for="couponCode">Code</label>
+            <input
+              type="text"
+              class="form-control"
+              id="couponCode"
+              name="couponCode"
+              placeholder="Enter coupon code"
+              required
+            />
+          </div>
+          <br />
+          <div class="form-group">
+            <label>Discount Type:</label>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="discountType"
+                value="percentage"
+                id="percentageRadio"
+              />
+              <label class="form-check-label" for="percentageRadio"
+                >Percentage</label
+              >
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="discountType"
+                value="fixed"
+                id="fixedRadio"
+              />
+              <label class="form-check-label" for="fixedRadio">Fixed</label>
+            </div>
+          </div>
+          <div class="form-group" id="percentageFields" style="display: none">
+            <br />
+            <label for="percentage">Discount Percentage</label>
+            <input
+              type="number"
+              class="form-control"
+              id="percentage"
+              name="amount"
+              min="0"
+              max="100"
+              placeholder="Enter the Discount Percentage"
+            />
+            <br />
+            <label for="minAmount">Minimum Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="minAmount"
+              name="minAmount"
+              placeholder="Enter the Minimum Amount to Apply Coupon"
+            />
+            <br />
+            <label for="maxAmount">Maximum Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="maxAmount"
+              name="maxAmount"
+              placeholder="Enter the Maximum Amount that can be deducted"
+            />
+          </div>
+          <div class="form-group" id="fixedFields" style="display: none">
+            <br />
+            <label for="amount">Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="amount"
+              name="amount"
+              placeholder="Enter the amount that will be deducted"
+            />
+            <br />
+            <label for="minAmountFixed">Minimum Amount</label>
+            <input
+              type="number"
+              class="form-control"
+              id="minAmount"
+              name="minAmountFixed"
+              placeholder="Enter the Minimum Amount to Apply Coupon"
+            />
+          </div>
+          <br />
+          <div class="form-group">
+            <label for="amount">Usage Limit</label>
+            <input
+              type="number"
+              class="form-control"
+              id="limit"
+              name="limit"
+              placeholder="Enter the Limit for the number of uses for each customer"
+            />
+          </div>
+          <br />
+          <div class="form-group">
+            <label for="couponType">Coupon Type</label>
+            <select class="form-control" id="couponType" name="couponType">
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+          <br />
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input
+              type="date"
+              class="form-control"
+              
+              name="startDate"
+              placeholder="Select the date to validate the Coupon"
+            />
+            <span id="dateError" style="color: red;"></span>
+
+          </div>
+          <br />
+          <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="dateField"
+              name="endDate"
+              placeholder="Select the date for Expiration of coupon"
+            />
+          </div>
+          <br />
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Create Coupon</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="header" style="margin-top: 80px">
+  <h1>Add Coupon</h1>
+</div>
+<%- include('../partials/admin-canvas')%>
+<div class="row">
+  <div class="col-12 text-end">
+    <button
+      class="btn btn-info me-2"
+      data-bs-toggle="modal"
+      data-bs-target="#addCouponModal"
+    >
+      <i class="fas fa-plus-circle"></i> Add Coupon
+    </button>
+  </div>
+  <div class="col-12">
+    <div class="container">
+      <div class="row">
+        <% coupons.forEach(function(coupon){%>
+        <div class="col-md-4 mb-3">
+          <div class="card coupon-card glow-on-hover" style="height: 500px;" >
+            <div class="card-body">
+                <h5 class="card-title">COUPON NAME : <%=coupon.couponName%></h5>
+                <p class="card-text">COUPON CODE : <%=coupon.couponCode%></p>
+                <p class="card-text">DISCOUNT TYPE : <%=coupon.discountType%></p>
+                <p class="card-text">AMOUNT : <%=coupon.amount%></p>
+                <p class="card-text">COUPON TYPE : <%=coupon.couponType%></p>
+                <p class="card-text">START DATE : <%=coupon.startDate%></p>
+                <% if ( date < coupon.endDate){%>
+                  <p class="card-text">EXPIRES ON : <%=coupon.endDate%></p>
+                <%}else{%>
+                  <p class="card-text text-danger">EXPIRED ON : <%=coupon.endDate%></p>
+                <%}%>
+                  <button class="btn btn-success">Edit Coupon</button>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+    
+</div>
+<style>
+.coupon-card {
+  position: relative;
+  background-color: #fff; /* Background color for the card */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Shadow for a raised look */
+  padding: 15px; /* Padding inside the card */
+  margin: 10px; /* Spacing between cards */
+}
+.coupon-card.glow-on-hover:hover {
+  box-shadow: 0 0 20px rgba(113, 88, 254, 0.7); /* Customize the glow effect as desired */
+  transition: box-shadow 0.3s ease-in-out; /* Add a smooth transition effect */
+}
+
+.right-v-shape {
+  border-width: 0 0 40px 40px;
+  border-color: transparent transparent #fff transparent;
+  top: 0;
+  right: -40px;
+}
+
+.coupon-card .card-title {
+  font-size: 18px; /* Title font size */
+  margin-bottom: 10px; /* Spacing between title and other text */
+}
+
+.coupon-card .btn-success {
+  background-color: #28A745; /* Button background color */
+  border: none;
+}
+
+.coupon-card .btn-success:hover {
+  background-color: #218838; /* Hover color for the button */
+}
+</style>
+
+
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.js"
+    integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    const dateField = document.getElementById("dateField");
+    const dateError = document.getElementById("dateError");
+
+    dateField.addEventListener("input", function () {
+      const selectedDate = new Date(dateField.value);
+      const currentDate = new Date();
+
+      if (selectedDate < currentDate) {
+        dateError.textContent = "Please select a future date.";
+        dateField.setCustomValidity("Please select a future date.");
+      } else {
+        dateError.textContent = "";
+        dateField.setCustomValidity("");
+      }
+    });
+
+document
+  .getElementById("couponForm")
+  .addEventListener("submit", function (event) {
+    if (!dateField.checkValidity()) {
+      event.preventDefault();
+    }
+  });
+
+    $("#couponForm").submit((e) => {
+      e.preventDefault();
+      $.ajax({
+        url: "/admin/addCoupon",
+        method: "post",
+        data: $("#couponForm").serialize(),
+        success: (response) => {
+          if (response.success) {
+            console.log("coupon added successfully");
+            window.location.reload();
+            $("#addCouponModal").modal("hide");
+            alert("coupon Added successfully");
+          } else {
+            console.log(response.error);
+            $("#flashMessage").text(response.error).show();
+          }
+        },
+        error: (xhr, status, error) => {
+          console.log("Error:", error);
+          $("#flashMessage")
+            .text("An error occurred. Please try again.")
+            .show();
+        },
+      });
+    });
+  </script>
+
+  <%- include('../layouts/footer') %>
+</div>

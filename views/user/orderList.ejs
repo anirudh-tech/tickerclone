@@ -1,0 +1,143 @@
+<%- include('../layouts/header') %>
+<%- include('../partials/user-header') %>
+
+<style>
+  /* Style for the table rows */
+  .order-card {
+    border-radius: 0.5rem; /* Increase border radius for each card */
+    margin-bottom: 0.5rem; /* Add a gap between cards */
+  }
+</style>
+<% order.forEach(function (order) { %>
+<div class="modal fade" id="returnReasonModal<%= order._id %>" tabindex="-1" aria-labelledby="returnReasonModalLabel<%= order._id %>" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="returnReasonModalLabel<%= order._id %>">Reason for Return</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="/order/return/<%= order._id %>">
+          <div class="mb-3">
+            <label for="returnReason" class="form-label">Please provide a reason for returning the order:</label>
+            <textarea class="form-control" name="returnReason" id="returnReason" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" data-bs-dismiss="modal" class="btn btn-primary" >Submit</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<% }); %>
+<div class="container tickerTimes mt-5">
+  <h2>Your Order List</h2>
+  <% if (order && order.length > 0) { %>
+    <% order.forEach(function (order) { %>
+      <div class="card shadow order-card">
+        <div class="card-body">
+          <h5 class="card-title">Order ID: ORD-<%= order._id %></h5>
+          <p class="card-text">Payment Method: <%= order.PaymentMethod %></p>
+          <p class="card-text">Order Status: <%= order.Status %></p>
+          <p class="card-text">Payment Status: <%= order.PaymentStatus %></p>
+          <p class="card-text">Date: <%= order.OrderDate %></p> 
+          <div class="d-flex justify-content-end">
+            <% if (order.Status === 'Delivered') { %>
+              <a  data-bs-toggle="modal" data-bs-target="#returnReasonModal<%= order._id %>" class="btn btn-danger me-2">Return</a>
+              <button class="btn btn-warning" onclick="downloadInvoice('<%= order._id %>')">Download Invoice </button>
+              <% } else if (order.Status === 'Returned') { %>
+                <a href="/order/details/<%= order._id %>" class="btn btn-primary me-2">View Details</a>
+                <button class="btn btn-danger" disabled>Returned</button>
+                <% }else if (order.Status === 'Return Requested') { %>
+                  <a href="/order/details/<%= order._id %>" class="btn btn-primary me-2">View Details</a>
+                  <a href="/order/cancelRequest/<%= order._id %>" class="btn btn-danger me-2">Return Requested/Cancel Request</a>
+                  <button class="btn btn-warning " onclick="downloadInvoice('<%= order._id %>')">Download Invoice</button>
+                  <% }else if (order.Status === 'Return Rejected') { %>
+                    <a href="/order/details/<%= order._id %>" class="btn btn-primary me-2">View Details</a>
+                    <button class="btn btn-warning me-2" onclick="downloadInvoice('<%= order._id %>')">Download Invoice </button>
+                  <button class="btn btn-danger" disabled>Request Rejected</button>
+                <% } else if (order.Status === 'Order Placed' || order.Status === 'Shipped') { %>
+              <a href="/order/details/<%= order._id %>" class="btn btn-primary me-2">View Details</a>
+              <% if (order.Status !== 'Cancelled') { %>
+                <button class="btn btn-danger" onclick="confirmCancellation('<%= order._id %>')">Cancel Order</button>
+              <% } %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p>You have no orders yet.</p>
+  <% } %>
+
+  <% if (order.length > 0) { %>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+        <% if(currentPage === totalPages) { %>
+          <%= totalCount %>
+        <% } else { %>
+          <%= currentPage * perPage %>
+        <% } %>
+        results from <%= totalCount %></p>
+      <ul class="pagination">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  <% } else { %>
+    <p>No results found.</p>
+  <% } %>
+</div>
+
+<script>
+  function confirmCancellation(orderId) {
+    const confirmation = confirm('Are you sure you want to cancel this order?');
+    if (confirmation) {
+      window.location.href = '/order/cancel/' + orderId;
+    }
+  }
+  async function downloadInvoice(orderId) {
+                  try {
+                    const response = await fetch('/download-invoice', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ orderId }),
+                    })
+                    if (response.ok) {
+
+                      console.log("response inside", response)
+                      window.location.href = `/download-invoice/${orderId}`;
+                    }
+                  } catch (err) {
+                    console.error("error in order History", err)
+                  } finally {
+                    // loadingSpinner.style.display = 'none';
+                  }
+                }
+
+  // function submitReturnReason(orderId){
+  //   let reason = document.getElementById('returnReason').value;
+  //   console.log("onsideeee",reason);
+  //   $.ajax({
+  //     url:`/order/return/${orderId}`,
+  //     type:"post",
+  //     data:{
+  //       returnReason:reason,
+  //       orderId:orderId
+  //     },
+  //     success:function(){
+  //       $('#returnReasonModal').modal('hide');
+  //       alert("request sent Successfully");
+  //     },
+  //   })
+  //   }
+</script>
+<%- include('../layouts/footer') %>
+

@@ -1,0 +1,79 @@
+<%-include('../layouts/header')%>
+<%- include('../partials/admin-header')%>
+<div class="header" style="margin-top: 80px;">
+  <h1>Users List</h1>
+</div>
+<%- include('../partials/admin-canvas')%>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>USER LIST</h2>
+        <div class="form-group  d-flex">
+          <div class="me-2">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+            <button class="btn btn-secondary me-2">SEARCH USER</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <div class="d-flex justify-content-end align-items-center">
+        </div>
+
+        <table class="table table-bordered table-shadow mt-3">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(user => { %>
+                    <tr>
+                      <td><%= user._id %></td>
+                      <td><%= user.Username %></td>
+                      <td><%= user.Status %></td>
+                      <td>
+                        <% if (user.Status === 'Active') { %>
+                            <a href="/admin/userlist/<%=user._id%>"><button onclick="return confirm('Are you sure you want to  block the user')" class="btn btn-success " >Block</button></a>
+                        <% } else if (user.Status === 'Blocked') { %>
+                            <a href="/admin/userlist/<%=user._id%>"><button onclick="return confirm('Are you sure you want to  unblock the user')" class="btn btn-danger">Unblock</button></a>
+                        <% } %>
+                      </td>
+                    </tr>
+                  <% }); %>
+            </tbody>
+        </table>
+    </div>
+    
+    <% if (users.length > 0) { %>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+          <% if(currentPage === totalPages){%>
+            <%=totalCount%>
+            <%}else{%>
+          <%= currentPage * perPage  %>
+          <%}%>
+           results from <%= totalCount %></p>
+           <ul class="pagination">
+            <%if(currentPage === 1){%>
+            <%}else{%>
+              <li class="page-item <%= currentPage === currentPage ? 'active' : '' %>">
+                <a class="page-link" href="?page=<%=currentPage-1%>"> prev </a>
+              </li>
+              <%}%>
+              <li class="page-item <%= currentPage === currentPage ? '' : '' %>">
+                <a class="page-link" href="?page=<%=currentPage%>"><%= currentPage %></a>
+              </li>
+              <li class="page-item <%= currentPage === currentPage ? 'active' : '' %>">
+                <a class="page-link" href="?page=<%=currentPage+1%>"> next</a>
+              </li>
+          </ul>
+      </div>
+      <% } else { %>
+        <p>No results found.</p>
+      <% } %>
+</div>
+
+<%- include('../layouts/footer') %>
+

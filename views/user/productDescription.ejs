@@ -1,0 +1,254 @@
+<%-include('../layouts/header')%> <%- include('../partials/user-header')%>
+<div class="container">
+  <div class="row tickerTimes">
+    <% if (product){%>
+    <div class="col-sm-12 col-md-6 col-xl-4">
+      <div class="product-cover mt-4 col-sm-12" id="img-container">
+        <img
+          src="/uploads/<%= product.images[0] %>"
+          alt="Cover Image"
+          class="img-fluid"
+          id="selectedImage"
+        />
+      </div>
+      <div class="product-images col-4 col-sm-3 mt-4 d-flex gap-3">
+        <% if (product.images && product.images.length > 0) { %> <% for (let i =
+        0; i < product.images.length; i++) { %>
+        <img
+          src="/uploads/<%= product.images[i] %>"
+          alt="Product Image <%= i + 1 %>"
+          class="img-thumbnail rounded float-start"
+          onclick="selectImage(this)"
+        />
+        <% } %> <% } %>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 mt-4 tickerDescription">
+      <div class="card border-dark">
+        <div class="card-body">
+          <h3 class="card-title tickerTimes"><%= product.ProductName %></h3>
+          <p class="card-text mt-3 tickerDescription">
+            Rating: 4.5 (100 reviews)
+          </p>
+          <% if (product.Price === product.DiscountAmount ){%>
+            <p class="card-text mt-3">
+              Price: <%= product.Price %>/-
+            </p>
+            <%} else{ %>
+          <p class="card-text mt-3">
+            Price:
+            <span class="text-decoration-line-through"
+              ><%= product.Price %>/-</span
+            >
+            <%= product.DiscountAmount %>/-
+          </p>
+          <%}%>
+          <p class="card-text tickerDescription mt-3">
+            <%= product.Description %>
+          </p>
+        </div>
+        <div class="mt-5 mb-5 ms-2">
+          <button
+            class="btn btn-outline-danger mt-2"
+            onclick="addToWishlist('<%=product._id%>')"
+          >
+            Add to Wishlist <i class="fas fa-heart"></i>
+          </button>
+          <a href="/addtocart/<%=product._id%>"
+            ><button class="btn btn btn-outline-success mt-2">
+              Add to Cart <i class="fas fa-cart-shopping"></i></button
+          ></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 mt-4 tickerTimes">
+      <div class="text-center">
+        <h1>Product Specification</h1>
+      </div>
+      <div>
+        <ul class="list tickerDescription">
+          <li class="mt-3"><%=product.Specification1 %></li>
+          <li class="mt-3"><%=product.Specification2 %></li>
+          <li class="mt-3"><%=product.Specification3 %></li>
+          <li class="mt-3"><%=product.Specification4 %></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- New Section: Cards -->
+    <div class="col-sm-12 mt-4">
+      <div class="text-center">
+        <h1>Reviews</h1>
+      </div>
+      <div class="row tickerDescription">
+        <!-- Card 1 -->
+        <div class="col-sm-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <!-- Star Rating -->
+              <div class="d-flex align-items-center">
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+              </div>
+
+              <!-- Dummy Review -->
+              <p class="card-text">
+                A great product with excellent features and quality.
+              </p>
+
+              <!-- Name (Bold Text) -->
+              <p class="card-text"><strong>John Doe</strong></p>
+            </div>
+            <!-- Card content here -->
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-sm-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <!-- Star Rating -->
+              <div class="d-flex align-items-center">
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+              </div>
+
+              <!-- Dummy Review -->
+              <p class="card-text">
+                A great product with excellent features and quality.
+              </p>
+
+              <!-- Name (Bold Text) -->
+              <p class="card-text"><strong>John Doe</strong></p>
+            </div>
+            <!-- Card content here -->
+          </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <!-- Star Rating -->
+              <div class="d-flex align-items-center">
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="far fa-star text-warning"></i>
+                <i class="far fa-star text-warning"></i>
+              </div>
+
+              <!-- Dummy Review -->
+              <p class="card-text">
+                A great product with excellent features and quality.
+              </p>
+
+              <!-- Name (Bold Text) -->
+              <p class="card-text"><strong>John Doe</strong></p>
+            </div>
+            <!-- Card content here -->
+          </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <!-- Star Rating -->
+              <div class="d-flex align-items-center">
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="far fa-star text-warning"></i>
+              </div>
+
+              <!-- Dummy Review -->
+              <p class="card-text">
+                A great product with excellent features and quality.
+              </p>
+
+              <!-- Name (Bold Text) -->
+              <p class="card-text"><strong>John Doe</strong></p>
+            </div>
+            <!-- Card content here -->
+          </div>
+        </div>
+
+        <!-- Add more cards as needed -->
+      </div>
+    </div>
+    <%}%>
+  </div>
+</div>
+<style>
+  #img-container {
+    position: relative; /* Ensure it's a positioned element */
+    z-index: 1; /* Set a higher z-index value */
+  }
+</style>
+
+<%- include('../partials/user-footer')%>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script
+  src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js"
+  type="application/javascript"
+></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(".img-thumbnail").click(function () {
+    console.log("ivdeee ind");
+    var selectedImageSrc = $(this).attr("src");
+    $("#selectedImage").attr("src", selectedImageSrc);
+    var options = {
+      width: 400,
+      zoomWidth: 600,
+      offset: { vertical: 0, horizontal: 10 },
+    };
+
+    new ImageZoom(document.getElementById("img-container"), options);
+  });
+
+  var options = {
+    width: 400,
+    zoomWidth: 600,
+    offset: { vertical: 0, horizontal: 10 },
+  };
+
+  new ImageZoom(document.getElementById("img-container"), options);
+
+  async function addToWishlist(productId) {
+    console.log("function called", productId);
+    const response = await fetch(`/addToWishlist/${productId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response) {
+        const data = await response.json()
+        console.log(data.success);
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Added to Wishlist",
+          text: "The product has been added to your wishlist.",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
+      } else {
+        Swal.fire({
+          icon: "info",
+          title: "Product Already in Wishlist",
+          text: "The product is already in your wishlist.",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
+      }
+    }
+  }
+</script>
+<%- include('../layouts/footer') %>

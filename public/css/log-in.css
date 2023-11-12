@@ -1,0 +1,15 @@
+.loginBorder{
+    border-right: 1px solid black;
+}
+
+.orText {
+    position: absolute;
+    top: 45%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    background-color: white; 
+    padding: 5px 10px; 
+    z-index: 1; 
+}
+
+

@@ -1,0 +1,88 @@
+<%-include('../layouts/header')%>
+<%- include('../partials/user-header')%>
+
+<header>
+    <h2 class="text-center tickerTimes">ORDER DETAILS</h2>
+</header>
+
+
+
+<!-- Two Cards in One Row -->
+<div class="container">
+ <div class="row">
+    <!-- Left Card: Items from Order -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-secondary"><strong>ITEMS FROM ORDER:  #<%=order._id%> </strong></div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Id</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.Items.forEach(function(item) { %>
+                            <tr>
+                                <td><img style="max-width: 50px;" src="/uploads/<%= item.ProductId.images[0] %>" alt=""></td>
+                                <td><%= item._id %></td>
+                                <td><%= item.ProductId.ProductName%></td>
+                                <td><%= item.Quantity %></td>
+                                <td>₹<%= item.ProductId.DiscountAmount %>/-</td>
+                            </tr>
+                        <% }); %>
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Card: Order Summary -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">ORDER SUMMARY</div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Grand Total:</td>
+                            <td><strong>₹<%=order.TotalPrice%>/- </strong></td>
+                        </tr>
+                        <tr>
+                            <td>Shipping Charge:</td>
+                            <td><strong>--</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Total:</td>
+                            <td><strong>₹<%=order.TotalPrice%>/-</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    <!-- Shipping Address Card -->
+<div class="col-md-4">
+    <div class="card mt-4">
+        <div class="card-header">SHIPPING INFORMATION</div>
+            <div class="card-body">
+                <h5>Name: <%= address.Address[0].Name %></h5>
+                <p>City: <%= address.Address[0].City %></p>
+                <p>Pincode: <%= address.Address[0].Pincode %></p>
+                <p>State: <%= address.Address[0].State %></p>
+                <p>Mobile: <%= address.Address[0].Mobile %></p>
+            </div>
+        </div>
+    </div>
+ </div>
+</div>
+<%- include('../layouts/footer') %>
